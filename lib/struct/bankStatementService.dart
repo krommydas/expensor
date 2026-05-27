@@ -109,49 +109,28 @@ class BankStatementService {
   }
 
   ParsedTransaction? _parseLine(String line) {
-    final columns = line
-        .split('\t')
-        .map((s) => s.trim())
+    // Normalize tabs (from PDF column reconstruction) to spaces, then tokenize
+    final parts = line
+        .replaceAll('\t', ' ')
+        .trim()
+        .split(RegExp(r'\s+'))
         .where((s) => s.isNotEmpty)
         .toList();
 
-    if (columns.length < 2) {
-      // Single-column: attempt regex extraction
-      return columns.length == 1 ? _parseFromSingleColumn(columns[0]) : null;
-    }
+    // Minimum: date token + at least one merchant word + amount token
+    if (parts.length < 3) return null;
 
-    // Find date (left-to-right)
-    int dateIndex = -1;
-    DateTime? date;
-    for (int i = 0; i < columns.length; i++) {
-      date = _tryParseDate(columns[i]);
-      if (date != null) {
-        dateIndex = i;
-        break;
-      }
-    }
-    if (dateIndex == -1 || date == null) return null;
+    final date = _tryParseDate(parts.first);
+    if (date == null) return null;
 
-    // Find amount (right-to-left, skip date column)
-    int amountIndex = -1;
-    double? amount;
-    for (int i = columns.length - 1; i >= 0; i--) {
-      if (i == dateIndex) continue;
-      amount = _tryParseAmount(columns[i]);
-      if (amount != null) {
-        amountIndex = i;
-        break;
-      }
-    }
-    if (amountIndex == -1 || amount == null) return null;
+    // Rightmost token must carry exactly 2 decimal places
+    final rightToken = parts.last;
+    if (!_hasExactTwoDecimals(rightToken)) return null;
+    final amount = _tryParseAmount(rightToken);
+    if (amount == null) return null;
 
-    // Remaining columns → merchant
-    final merchantParts = <String>[];
-    for (int i = 0; i < columns.length; i++) {
-      if (i == dateIndex || i == amountIndex) continue;
-      merchantParts.add(columns[i]);
-    }
-    final merchantRaw = merchantParts.join(' ').trim();
+    // Everything between the date token and amount token is the merchant
+    final merchantRaw = parts.sublist(1, parts.length - 1).join(' ').trim();
     if (merchantRaw.isEmpty) return null;
 
     final merchantClean = sanitizeMerchant(merchantRaw);
@@ -164,34 +143,11 @@ class BankStatementService {
     );
   }
 
-  // Fallback: regex scan within a single fused text string
-  ParsedTransaction? _parseFromSingleColumn(String raw) {
-    final dateMatch =
-        RegExp(r'(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})').firstMatch(raw);
-    final amountMatch = RegExp(
-            r'([-+]?\d{1,3}(?:[.,]\d{3})*[.,]\d{2}|\d+\.\d{2})\s*(?:CR|DR)?',
-            caseSensitive: false)
-        .firstMatch(raw);
-    if (dateMatch == null || amountMatch == null) return null;
-
-    final date = _tryParseDate(dateMatch.group(0)!);
-    final amount = _tryParseAmount(amountMatch.group(0)!);
-    if (date == null || amount == null) return null;
-
-    String merchantRaw = raw
-        .replaceFirst(dateMatch.group(0)!, '')
-        .replaceFirst(amountMatch.group(0)!, '')
-        .trim();
-    if (merchantRaw.isEmpty) return null;
-
-    final merchantClean = sanitizeMerchant(merchantRaw);
-    return ParsedTransaction(
-      date: date,
-      merchantRaw: merchantRaw,
-      merchantClean: merchantClean,
-      amount: amount,
-      hash: _computeHash(date, merchantClean, amount),
-    );
+  // Returns true only when the token ends with exactly two decimal digits
+  // (e.g. "12.50", "-1.234,00", "1.500,00 CR").
+  bool _hasExactTwoDecimals(String s) {
+    final stripped = s.replaceAll(RegExp(r'[A-Za-z€$£¥()\s]'), '');
+    return RegExp(r'[.,]\d{2}$').hasMatch(stripped);
   }
 
   // ─── Sanitization ─────────────────────────────────────────────────────────

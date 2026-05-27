@@ -383,40 +383,37 @@ class _StatementPreviewSheet extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                 maxLines: 2,
                               ),
-                              const SizedBox(height: 2),
-                              Row(
-                                children: [
-                                  TextFont(
-                                    text: DateFormat('dd MMM yyyy')
-                                        .format(t.date),
-                                    fontSize: 11,
-                                    textColor: getColor(
-                                        context, 'textLight'),
-                                  ),
-                                  if (t.category != null) ...[
-                                    const SizedBox(width: 8),
-                                    Container(
-                                      padding:
-                                          const EdgeInsetsDirectional
-                                              .symmetric(
-                                              horizontal: 6,
-                                              vertical: 2),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primaryContainer,
-                                        borderRadius:
-                                            BorderRadius.circular(4),
-                                      ),
-                                      child: TextFont(
-                                        text: t.category!,
-                                        fontSize: 10,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ],
-                                ],
+                              const SizedBox(height: 3),
+                              TextFont(
+                                text: DateFormat('dd MMM yyyy')
+                                    .format(t.date),
+                                fontSize: 11,
+                                textColor:
+                                    getColor(context, 'textLight'),
                               ),
+                              if (t.category != null) ...[
+                                const SizedBox(height: 4),
+                                Container(
+                                  padding:
+                                      const EdgeInsetsDirectional
+                                          .symmetric(
+                                          horizontal: 7,
+                                          vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                    borderRadius:
+                                        BorderRadius.circular(5),
+                                  ),
+                                  child: TextFont(
+                                    text: t.category!,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
                         ),
