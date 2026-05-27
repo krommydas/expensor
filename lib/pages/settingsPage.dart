@@ -21,6 +21,7 @@ import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/exportDB.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/widgets/exportCSV.dart';
+import 'package:budget/widgets/importBankStatement.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/activityPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
@@ -611,6 +612,8 @@ class SettingsPageContent extends StatelessWidget {
         ExportCSV(),
 
         ImportCSV(),
+
+        ImportBankStatement(),
 
         SettingsHeader(title: "backups".tr()),
 

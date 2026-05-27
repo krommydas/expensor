@@ -4596,6 +4596,17 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
+  Future<bool> bankStatementTransactionExists(
+      DateTime date, double amount, String name) async {
+    final result = await (select(transactions)
+          ..where((t) =>
+              t.dateCreated.equals(date) &
+              t.amount.equals(amount) &
+              t.name.equals(name)))
+        .getSingleOrNull();
+    return result != null;
+  }
+
   Future<List<String>> getAllCategoryPks(
       {int? limit,
       int? offset,
