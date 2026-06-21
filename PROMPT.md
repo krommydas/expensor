@@ -47,20 +47,20 @@ Use **Node.js** with an embedded database, HTTP-based protocol (no auth — assu
   "instrumentProviders": [
     {
       "name": "string",
-      "fileSource": { "namePattern": "string" },
+      "fileSource": { "namePattern": "string" (optional) },
       "sourceColumns": [
         {
           "target": "<Enum — one of expense model columns>",
-          "sourceName": "string",
-          "sourceIndex": "number",
-          "format": "string"
+          "sourceName": "string" (optional),
+          "sourceIndex": "number" (optional),
+          "predefinedValue": "string" (optional),
+          "format": "string" (optional)
         }
       ]
     }
   ]
 }
 ```
-> `fileSource` is optional on `instrumentProviders`.
 
 ---
 
@@ -68,8 +68,6 @@ Use **Node.js** with an embedded database, HTTP-based protocol (no auth — assu
 
 Expose full **CRUD** endpoints for:
 - `/expenses`
-- `/categories`
-- `/instruments`
 - `/settings`
 
 ---
@@ -78,20 +76,20 @@ Expose full **CRUD** endpoints for:
 
 **Input:**
 - A CSV or Excel file
-- Optionally, a list of column mappings, each containing:
-  - `target` — the expense model field this column maps to *(required)*
-  - `sourceIndex` — the column index in the parsed row *(required)*
-  - `format` — parsing format hint (e.g. date format) *(optional)*
+- Optionally, a list of column mappings (same model as settings.instrumentProviders.sourceColumns)
 
 **Output:**
 - A list of parsed rows, each containing expense model fields (some may be empty)
-- The list of columns found in the file, each tagged with its expense model mapping
+- The list of columns config (same model as settings.instrumentProviders.sourceColumns)
 
 **Column detection order (applied per unmapped column):**
 
 1. **Explicit mapping** — use column data passed in the request input
-2. **Header-based mapping** — read header row from the file; map headers to expense model fields using synonyms and common financial naming conventions
-3. **Content-based mapping** — infer type from content (e.g. a parseable date is likely a date field)
+    - if the `column.predefinedValue` is filled, use the value to map the column
+2. **Header-based mapping** — read header row from the file.. map headers to expense model fields using synonyms and common financial naming conventions
+3. **Content-based mapping** — infer type from content.. for example:
+    - a parseable date is likely a date field
+    - masked content (e.g. **9012) is most likely a card number or expense model instrument instrument
 4. **Conflict rule** — if two columns qualify for the same expense field, leave both unmapped
 
 **Parsing rules:**
@@ -123,34 +121,7 @@ Use **React** with **React Context** for state management, **Material UI** for s
 
 ### Settings Page
 
-Organized as expandable sections.
-
-#### Section: Categorization
-
-**Subsection — AI Source:**
-- Dropdown: AI model (one option: "Claude")
-- Input: "Api Key"
-- On dropdown change or on blur of the key input → call server to persist
-- "Test Connection" button:
-  - Calls the AI provider with the configured credentials (same categorization call as the server)
-  - On success: show a checkmark
-  - On failure: show an error message
-
-**Subsection — Existing Mappings:**
-- Search input: "Search for merchant"
-- Accordion list of categories (loaded from server):
-  - Expanding a category shows its linked merchants as tag/label items
-  - Each merchant tag has an `×` icon to remove it (calls API to update that category)
-  - An `+` icon to manually add a merchant (persists on click-outside)
-  - Long merchant names are truncated; full name shown on hover/click
-- Below the accordion: an "Add Category" button (calls server to persist, then reloads the list)
-
-#### Section: Instruments
-
-Displays a list of **Providers**, with each one displayed with the...
-*(section incomplete in original)*
-
----
+_See **PROMPT - GUI - Settings.md**_ 
 
 ### Import Page
 
