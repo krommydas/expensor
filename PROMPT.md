@@ -39,29 +39,47 @@ Displays **tiles**: "Revolut", "File"
 
 #### File Tile
 
-1. Shows a file input selector (CSV or Excel only)
-2. On file selection → calls backend parse API → receives rows and columns
-3. When results are received a grid is shown below
+##### File Input
 
-**Results Grid:**
+Shows a file input selector (CSV or Excel only). On file selection → calls backend parse API with the file name and its content
+When a response is received:
+  - if response indicates some form of unpredictable error display a fading error prompt on the top: "something went wrong, please try again"
+  - if a response indicates duplicate issue display a fading warbing prompt on the top: "File data already imported"
+  - if a success response and the instrument provider retruned has a `name` equal to "<Provider Name Missing>":
+      - display a prompt (with an option to close it) with title "New provider found" and within an input box with label: "select name:". Also a "Save" button on the bottom
+      - upon clicking on save a relevant call on the settings should be made to save the update instrumentProvider model
+      - if the save call fails display a relevant disappearing error message in the top and keep the prompt open
+      - if the save succeeds show the grid below with the updated provider name
+      - if the user clicks to close the prompt show the grid below with the default provider name
+  - if a success response and the instrument provider retruned has a `name` NOT equal to "<Provider Name Missing>" display the grid below with that name
+  - in case of a success response save on the background the provider `key`
 
-- **Header row:** 
+##### Results Grid
+
+Display as title of the grid the provider name. Before dispaying the grid a call to retrieve the settings model should be done.
+
+###### Header row 
   - expense model column names
   - below each column name: a label showing the mapping source (file column name or index), styled differently from the column name + the format is available (e.g. date)
   - at the very end one extra column with name "Actions"
-- **Rows split into 3 categories (in this order):**
+
+###### Rows Grouping
+
+The rows should be grouped in 3 categories:
 
   | Category | Description | Sort order |
   |----------|-------------|------------|
   | **Problematic** | Rows with one or more unparsed expense columns | Most missing fields first |
-  | **Ignored** | Rows whose merchant is in `ignoredMerchants`; visually marked as excluded | By merchant name |
+  | **Ignored** | Rows whose merchant is in `settings.ignoredMerchants`; visually marked as excluded | By merchant name |
   | **Successful** | All remaining rows | By date |
 
-**Problematic rows actions:**
+ ###### Problematic rows
+
+Those should have the following actions as a last column:
 
 - **"Ignore" button** — prompts the user:
   - "Ignore this row only" → removes the row from the grid (remembers the user selection in case the data of the grid are refetched)
-  - "Ignore all rows for merchant: {merchant}" → calls settings API to add merchant to `ignoredMerchants` & calls the api again to refetch the data for the grid
+  - "Ignore all rows for merchant: {merchant}" → calls settings API to add merchant to `ignoredMerchants` & moves all rows that match that merchant to the **Ignored** rows group
      - this button should be enabled only if the merchant cell in the row is available/parsed
 
 - **Empty cells: (clickable but with no visible button)**
@@ -76,9 +94,12 @@ Displays **tiles**: "Revolut", "File"
           - if user clicked on instrument column retrieve the instruments from the settings api and display their name on the select and as value the key
           - if user clicked on any other column originally this option (predefined value) should not be available
     - on the bottom of all this 2 button should be available:
-        - "Apply" -> this should do a call to the settings to update
+        - "Apply" -> this should do a call to the settings to update the instrument provider with the key stored in the background and the selected column mapping to be updated/overriden
+        - "Cancel" -> this should just close the prompt
 
-**Successful rows actions:**
+###### Successful rows
+
+Those should have the following actions as a last column:
 
 - **"Ignore" button** — prompts the user:
   - "Ignore this row only" → removes the row from the grid (remembers the user selection in case the data of the grid are refetched)
