@@ -18,6 +18,7 @@ Use **React** with **React Context** for state management, **Material UI** for s
 
 - **Left sidebar** with 4 navigation entries, each with an icon:
   - Home
+  - Manage
   - Import
   - Settings
 - **Right panel** showing the selected page content
@@ -30,83 +31,33 @@ _See **PROMPT - GUI - Settings.md**_
 
 ### Import Page
 
-Displays **tiles**: "Revolut", "File"
+_See **PROMPT - GUI - Import.md**_
 
-- Clicking a tile hides all other tiles and opens a **pane** with:
-  - `×` button (top-right) — resets to tile view
-  - Tile name as header
-- The **Revolut** tile is not clickable
+### Management Page
 
-#### File Tile
+The page should display a grid with some search options on top of it. The title should be: "Manage Expenses"
 
-##### File Input
+#### Search bar
 
-Shows a file input selector (CSV or Excel only). On file selection → calls backend parse API with the file name and its content
-When a response is received:
-  - if response indicates some form of unpredictable error display a fading error prompt on the top: "something went wrong, please try again"
-  - if a response indicates duplicate issue display a fading warbing prompt on the top: "File data already imported"
-  - if a success response and the instrument provider retruned has a `name` equal to "<Provider Name Missing>":
-      - display a prompt (with an option to close it) with title "New provider found" and within an input box with label: "select name:". Also a "Save" button on the bottom
-      - upon clicking on save a relevant call on the settings should be made to save the update instrumentProvider model
-      - if the save call fails display a relevant disappearing error message in the top and keep the prompt open
-      - if the save succeeds show the grid below with the updated provider name
-      - if the user clicks to close the prompt show the grid below with the default provider name
-  - if a success response and the instrument provider retruned has a `name` NOT equal to "<Provider Name Missing>" display the grid below with that name
-  - in case of a success response save on the background the provider `key`
+The look and feel should be copied from the Splunk search bar with a search box on the left followed by a time selection and the search button. On top of all that, a button should displayed on the right with title: "Pin Instrument Provider".
 
-##### Results Grid
+**search box**
+ - it should have as a placeholder: "enter either search terms or instructions" or something equivelant
 
-Display as title of the grid the provider name. Before dispaying the grid a call to retrieve the settings model should be done.
+**time selection**
+ - it should contain splunk "preset, "relative" & "date range" options and for all of them the lowest unit offered should be days
 
-###### Header row 
-  - expense model column names
-  - below each column name: a label showing the mapping source (file column name or index), styled differently from the column name + the format is available (e.g. date)
-  - at the very end one extra column with name "Actions"
-
-###### Rows Grouping
-
-The rows should be grouped in 3 categories:
-
-  | Category | Description | Sort order |
-  |----------|-------------|------------|
-  | **Problematic** | Rows with one or more unparsed expense columns | Most missing fields first |
-  | **Ignored** | Rows whose merchant is in `settings.ignoredMerchants`; visually marked as excluded | By merchant name |
-  | **Successful** | All remaining rows | By date |
-
- ###### Problematic rows
-
-Those should have the following actions as a last column:
-
-- **"Ignore" button** — prompts the user:
-  - "Ignore this row only" → removes the row from the grid (remembers the user selection in case the data of the grid are refetched)
-  - "Ignore all rows for merchant: {merchant}" → calls settings API to add merchant to `ignoredMerchants` & moves all rows that match that merchant to the **Ignored** rows group
-     - this button should be enabled only if the merchant cell in the row is available/parsed
-
-- **Empty cells: (clickable but with no visible button)**
-   - a prompt should be displayed to choose the mapping type
-   - the prompt should have on top a "mini grid" with the contents from the backend with a title: "Sample Parsed File Rows"
-   - a select type component with title: "Map form" should be visible below where the user can select:
-      - "Column Order" -> if that is selected a number selection editor should be displayed on the right which should accept values only from `1` until the length of the sample row columns returned from the backend
-      - "Column Name" -> if that is selected another select component should be displayed on the right with values from the header row column values returned from the sample data from the back end
-         - that option should be available only if the header row was returned from the back end
-      - "Predefined Value" -> a select with search functioniality should be displayed on the right with values drawn from:
-          - if user clicked on currency column use a free open api with no authentication/authorization (e.g. frankurter) to retrieve currencies
-          - if user clicked on instrument column retrieve the instruments from the settings api and display their name on the select and as value the key
-          - if user clicked on any other column originally this option (predefined value) should not be available
-    - on the bottom of all this 2 button should be available:
-        - "Apply" -> this should do a call to the settings to update the instrument provider with the key stored in the background and the selected column mapping to be updated/overriden
-        - "Cancel" -> this should just close the prompt
-
-###### Successful rows
-
-Those should have the following actions as a last column:
-
-- **"Ignore" button** — prompts the user:
-  - "Ignore this row only" → removes the row from the grid (remembers the user selection in case the data of the grid are refetched)
-  - "Ignore all rows for merchant: {merchant}" → calls settings API to add merchant to `ignoredMerchants` & calls the api again to refetch the data for the grid
-
-- **"Change Category" button** — opens a prompt titled "Select new category for merchant: {merchant}":
-  - Calls settings API to load categories with their merchants; displays as a select component
-  - Option to add a new category inline
-  - On selection → calls API to update the merchant's category mapping
-  - Then re-parses the file via backend and refreshes the grid
+**pin instrument provider**
+ - upon clicking a call to the backend should be made to retrieve the settings and specficially `instrumentProviders`
+ - if the call fails a relative error message should be displayed as dissapearing from the top and nothing else should happen
+ - if the call succeeds a prompt should be open with title: "select an instrument provider"
+ - the prompt should contain a select component where you can select the instrument provider (select by name)
+ - next to it another select component with placeholder: "specific import" where the `pastImports` should be displayed by date (order by descending)
+   - another option should be injected to that list, always displayed on top and be preselected: "All"
+ - on the bottom right two buttons should be displayed: "Pin Provider", "Cancel"
+ - upon clicking on "Cancel" the prompt closes with no further action
+ - upon clicking on the other button, the selected provider + the pastImport (if an option other than the injected one was selected) are stored in the background
+ - the prompt closes and the select provider name is displayed on the left of the `pin instrument provider button` as a small tile with:
+     - provider name visible + on the botton right with smaller font the pastImport date (if selected)
+     - a clickable "x" icon on the top right which on click should remove that provider tile and clear it as a stored value on the background
+     - the instrument provider `key` & pastImport `mnemonic` should be used then on all searches on the grid below as extra parameters
