@@ -1,9 +1,7 @@
 - each of the following section is `expandable`
 - try to make use of reusable react components, if possible, without sacrifycing extendiblity by introducing too much tight coupling
 
-# Section: Categorization
-
-## Subsection — AI Source
+# Section - AI Source
 - Dropdown: AI model (one option: "Claude")
 - Input: "Api Key"
 - On dropdown change or on blur of the key input → call server to persist
@@ -11,6 +9,8 @@
   - Calls the AI provider with the configured credentials (same categorization call as the server)
   - On success: show a checkmark
   - On failure: show an error message
+
+# Section: Categorization
 
 ## Subsection — Merchant Mappings
 - Search input: "Search for merchant/category"
@@ -79,7 +79,8 @@
         - upon clicking on the button a call should be made to the settings api with the the instrument and it's updated provider
     - a sub section called: "File Source" with:
        - it's fileSource.namePattern field as "Import File Pattern" with an input text box -> any change to it should trigger a relative update to the backend and a green disappearing message on complete with the text "updated" ("red" in case of error)
-       - below it, 3 examples should be displayed with file names matching that pattern '
+       - below it, 3 examples should be displayed with file names matching that pattern'
+   - an expandable sub section called: "Past Imports" which should display on expand a view only list of the `date` + the `mnemonic` fields of the **pastImports** field
     - a sub section called: "Import File Columns Mapping:"
        - all expense model columns should be displayed as a list with the following order from left to right
        - the name of expense model column

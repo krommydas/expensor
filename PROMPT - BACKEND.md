@@ -5,10 +5,10 @@ Use **Node.js** with an embedded database, HTTP-based protocol (no auth — assu
 #### Expense
 | Field | Type |
 |-------|------|
+| id | string (autogenarted if null) |
 | date | date |
 | merchant | text |
 | amount | number |
-| currency | text |
 | category | text |
 | instrument | text |
 | importMnemonic | text |
@@ -67,9 +67,25 @@ Use **Node.js** with an embedded database, HTTP-based protocol (no auth — assu
 
 ### API
 
-Expose full **CRUD** endpoints for:
-- `/expenses`
-- `/settings`
+#### Settings
+Expose **CRUD** operations
+
+#### Expenses
+Expose the following operations:
+**create**:
+  - input: full expense model (without the id column)
+  - output: a status indicating the result of the opretion
+  - operation: -> add the expense model (autogenerate the id) 
+**update**:
+  - input: a list of expense models
+  - output: a status indicating the result of the opretion
+  - operation: -> update the relevant expense models based on their id -> if any of the update fails, fail the whole operation and rollback
+**delete**:
+  - input: a list of expense model ids
+  - output: a status indicating the result of the opretion
+  - operation: -> delete the relevant expense models based on their id -> if any of the delete fails, fail the whole operation and rollback
+
+ #### Search
 
 Choose based on the requirements on the GUI section about the API type (rest or graphql or grpc).
 
@@ -86,6 +102,7 @@ Choose based on the requirements on the GUI section about the API type (rest or 
 - A sample list of rows parsed (not mapped to expense columns):
   - include the header row if one is found
   - include a list of rows with each row having either a list of column values (text) or column attributes & values
+- A list of instrument keys found in the data that don't exist in the settings model 
 
 #### Logic
 
@@ -140,7 +157,10 @@ If the mapping can not performed leave the relevant field empty
 1. For each column, apply format-appropriate rules (if applicable in the column mapping)
 2. If there is no column mapping found for the expense `category` column but for the `merchant` is and a cell value was parsed:
   1. Try to find a category from the settings that contains the merchant in it's list of merchants
-  2. If no match, call the AI provider (model + key from settings) to categorize the merchant
+  2. If no match, & `settings.ai` field is defined, then use it (model + key) to categorize the merchant
      - Strip any sensitive data from the merchant name before the external call
      - Persist the result (merchant → category) in the categories model for future use -> try to align the found category with one of the existing categories
      - If the final category is new and not linked to a group, try to use AI to find a relavant group (try to align with existing groups)
+3. If an instrument cell on the results is found which corresponds to a value **not** matching any of the `settings` -> `instruments` -> `key` where `provider` matches the resolved *instrumentProvider*:
+   - add 1 new entry in the settings instruments list with the key & name equal to the instrument cell value and the provider the resolved instrumentProvider
+   - add this instrument key on the output of the call list of not found instruments

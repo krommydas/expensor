@@ -17,9 +17,15 @@ When a response is received:
       - display a prompt (with an option to close it) with title "New provider found" and within an input box with label: "select name:". Also a "Save" button on the bottom
       - upon clicking on save a relevant call on the settings should be made to save the update instrumentProvider model
       - if the save call fails display a relevant disappearing error message in the top and keep the prompt open
-      - if the save succeeds show the grid below with the updated provider name
-      - if the user clicks to close the prompt show the grid below with the default provider name
+      - if the save succeeds show the grid below with the updated provider name or the prompt with the missing instruments (see below)
+      - if the user clicks to close the prompt show the grid below with the default provider name or the prompt with the missing instruments (see below)
   - if a success response and the instrument provider retruned has a `name` NOT equal to "<Provider Name Missing>" display the grid below with that name
+  - if a success response and a list of not found instruments is not empty then, *after* the instrumentProvider prompt:
+     - display a prompt with title: "Update existing instruments"
+     - display inisde a list of not found instrument keys and next to each one a text editor with label "enter name" & a select component with label "select currency"
+     - retrieve the currency items to show using a free open api with no authentication/authorization (e.g. frankurter) and display/store their ISO code
+     - on the bottom a "Save" button should be displayed, which on click should update the settings model with the updated instruments
+     - the prompt should also be "closeable" and in that case nothing should happen -> the below grid should be displayed
   - in case of a success response save on the background the provider `key`
 
 ### Results Grid
@@ -28,6 +34,7 @@ When a response is received:
 - The grid header row should be "sticky" and all row groups/rows beneath it should be scrollable.
 - The column `importMnemonic` should be hidden both at the header and the row cells but also in any selection done by the user.
    - it should, however, be included in the backend call to save the expense data as explained in **Header row** below
+- The column `id` should also be hidden both at the header and the row cells but also in any selection done by the user
 
 #### Header row 
 
@@ -62,7 +69,6 @@ In addition, empty cells should be clickable with the following logic on click:
       - "Column Name" -> if that is selected another select component should be displayed on the right with values from the header row column values returned from the sample data from the back end
          - that option should be available only if the header row was returned from the back end
       - "Predefined Value" -> a select with search functioniality should be displayed on the right with values drawn from:
-          - if user clicked on currency column use a free open api with no authentication/authorization (e.g. frankurter) to retrieve currencies
           - if user clicked on instrument column retrieve the instruments from the settings api and display their name on the select and as value the key
           - if user clicked on any other column originally this option (predefined value) should not be available
     - on the bottom of all this 2 button should be available:
