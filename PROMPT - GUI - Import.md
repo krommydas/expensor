@@ -34,23 +34,26 @@ When a response is received:
 - The grid header row should be "sticky" and all row groups/rows beneath it should be scrollable.
 - The column `importMnemonic` should be hidden both at the header and the row cells but also in any selection done by the user.
    - it should, however, be included in the backend call to save the expense data as explained in **Header row** below
-- The column `id` should also be hidden both at the header and the row cells but also in any selection done by the user
 
 #### Header row 
 
   - expense model column names
   - below each column name: a label showing the mapping source (file column name or index), styled differently from the column name + the format is available (e.g. date)
-  - at the very end one button with name: "Save Successfull Rows", which on click should save only the successful row group rows on the backend by calling the relevant API of the expenses.
+  - at the very end one button with name: "Save Successfull Rows", which on click should save the following rows on the backend by calling the relevant API of the expenses:
+    - all successfull row group rows + the duplicate group rows with attribute `notDuplicate`
+    - if save was succesfull a relevant fading top screen success message (green background) is displayed and the whole **File tile** is collapsed/closed
+    - if save was NOT succesfull a relevant fading top screen error message (red background) is displayed and nothing else should happen
 
 #### Rows Grouping
 
 The rows should be grouped in 3 categories:
 
-  | Category | Description | Sort order |
+  | Category | Description | Sort order | Background color
   |----------|-------------|------------|
-  | **Problematic** | Rows with one or more unparsed expense columns | Most missing fields first |
-  | **Ignored** | Rows whose merchant is in `settings.ignoredMerchants`; visually marked as excluded | By merchant name |
-  | **Successful** | All remaining rows | By date |
+  | **Problematic** | Rows with one or more unparsed expense columns | Most missing fields first | light red |
+  | **Ignored** | Rows whose merchant is in `settings.ignoredMerchants`; visually marked as excluded | By merchant name | light green |
+  | **Duplicates** | Rows where all fields are parsed but they are found more than 1 time in the results | By date | light yellow |
+  | **Successful** | All remaining rows | By date | light green |
 
  #### Problematic rows
 
@@ -82,6 +85,17 @@ Those should have the following actions as a last column:
 **"Un-Ignore" button** — prompts the user:
   - "Un-Ignore this row only" → removes the row from the grid (remembers the user selection in case the data of the grid are refetched) and moves it either to the successfull or problematic rows, depending if it has any empty cells
   - "Un-Ignore all rows for merchant: {merchant}" → calls settings API to remove merchant from `ignoredMerchants` & moves all rows that match that merchant to the respective rows group dependening if they have empty cells or not, just like in the above case.
+
+#### Duplicate rows
+Those should have the following actions as a last column:
+
+**"Not a duplicate"** - only if the row is NOT marked as `notDuplicate` on the background
+Marks this row as `notDuplicate` (background row data) and remembers the user selection in case the data of the grid are refetched
+
+**"Duplicate"** - only if the row is marked as `notDuplicate` on the background
+Remove the `notDuplicate` attribute of the row and remembers the user selection in case the data of the grid are refetched
+
+Rows with `notDuplicate` attribute should be marked with the same background color as the *successfull rows*
 
 #### Successful rows
 
