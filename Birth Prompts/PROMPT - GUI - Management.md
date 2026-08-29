@@ -40,16 +40,37 @@ It should have as label: "Use AI" and be placed above the *search box*. If check
 ## Footer Row 
  - It should display the number or rows selected, only if any or the rows checkbox is selected.
  - A split button with the following options: "Delete Selected" (default) & "Adjust Selected (TODO)". The button should only be visible if any or the rows checkbox is selected.
+ - An "add" button should be displayed
  - A pagination component should be displayed on the right only if multipe pages are available for the results
 
  ### Split button
    - if the "Delete Selected" option was pressed a prompt should be displayed with the following mesage: "All of the selected expenses will be deleted for ever. Are you sure ?"
    - if yes a call to the backend should be made with the selected row ids and show either a fading success (green) or error (red) message on the top
    - upon successfull response the data of the grid should be refetched from the backend using the same filters
-   - The "Adjust Selected" button option should be grayed out and not clickable
+   - The "Adjust Selected" button should dispay a prompt where the user could change the category of all of the transactions
+      1. a call to the settings api should be made to find the current categories - merchant mappings
+      2. the system should calculate and display on the bottom of the prompt the updated merchant re-categorizations
+          - every merchant could be added/removed from a category (existing or new) -> show relative graphiscs to indicate this
+      3. a confirmation button should be displayed together with a cancellation one
+      4. if cancelled the prompt should be closed with no further up action
+      5. if confirmed a call to both the settings & transactions APIs should be made to persist the changes
+      6. on success a green postive message should be faded from the top and prompt close and on error a respective erroneous one should be displayed and prompt should stay open
+ 
+ ### Add button
+   - a prompt should be displayed where you can enter the transaction: `date`, `amount`, `merchant`, `category` and `instrument`
+   - for merchant an auto-complete feature should be done where merchant names from the settings api should be searched and prompted
+   - if a merchant is selected, a settings search should be made to find if it belongs to a category and this should be preslected on the category input
+   - if the user changes the category of an existing merchant or add a new merchant a relative wanring message should be displayed on the bottom for settings update with the related changes
+   - the instrument field should be a select one with the available values from the settings model
+   - the `importMnemonic` should be a custom predefined system wide value to indicate it's a GUI user custom single addition of the transaction and not visible to the user
+   - on the bottom 2 buttons with similar logic like the Split Button -> "Adjust Selected" above
 
 ## Data Rows
 The expense data rows should be displayed here with the following rules:
  - `id` field should be available in the row data on the background but not visible
  - `instrument` cells should display the instrument name retrieved by calling the `settings` -> `instruments` where **key** field is equal to the row instrument cell value
  - `amount` field should also display the *currency* by looking up the `currency` field from the row instrument key (see above)
+ - merchant, date, category and importMnemonic should be also displayed
+ - the user should be able to move the columns around by drap and drop and change their appearance order (from left to right)
+ - the default columns order should be: date, amount, category, merchant, instrument, importMnemonic
+ - a checkbox should always be dispayed per row as a last column on the right
