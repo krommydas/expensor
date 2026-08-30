@@ -43,12 +43,23 @@ Expose the following operations:
 
 _See **PROMPT - BACKEND - File Import.md**_ 
 
-## Historical Data
+## Aggregated Data
 
-- A read operation on the `HistoricalData` model should be enabled based on **aggregator,period,source** fields.
-- If *source* field is not provided in the input `Native` should be assumed as default.
-- Output should be a number
+### Input 
+- `PeriodStart` -> date
+- `PeriodEnd` -> date
+- `Filters` -> array of [filter on any of the expense model fields - except date] (_optional_)
+- `Aggregator` -> one of: Merchant, Category, Category group, Instrument (_optional_)
+### Output
+ A list of:
+- `Value` -> number (Int)
+- `PeriodStart` -> date
+- `PeriodEnd` -> date
+- `AggregatorValue` -> text (_optional_)
 
-### Logic
+# Background Jobs
+
+## Syncing Historical Data
+
 
 

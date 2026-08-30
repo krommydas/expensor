@@ -47,21 +47,28 @@
     }
   ],
   "reports": {
-    "assistedHistoricalData": {
-      "enabled": "boolean",
-      "dataCountryProfile": "string" 
-    }
+    "assistedHistoricalDataProfiles": [string],
+    "dataCountryProfile": "string"
   }
 }
 ```
 
-# HistoricalData (many items)
+# ExternalAggregatedData (many items)
 ```json
 {
     "createdAt": "timestamp",
-    "aggregator": "<Enum — one of: Category, CategoryGroup, Instrument, Merchant>",
-    "period": "<Enum — one of: Month, Quarter, Year, AllTime>",
-    "value": "number (2 decimal places)",
-    "source": "<Enum — one of: Native, External>"
+    "aggregatorValue": "text" (optional),
+    "periodStart": "date",
+    "periodEnd": "date",
+    "value": "number (Int)",
+}
+```
+
+# HistoricalRates (many items) 
+```json
+{
+    "date": "date",
+    "currency_pair": "string with predefined format: {CURRENCY_ISO_CODE_FROM}_{CURRENCY_ISO_CODE_TO}",
+    "rate": "number",
 }
 ```

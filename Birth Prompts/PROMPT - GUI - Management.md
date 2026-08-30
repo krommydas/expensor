@@ -39,15 +39,17 @@ It should have as label: "Use AI" and be placed above the *search box*. If check
 
 ## Footer Row 
  - It should display the number or rows selected, only if any or the rows checkbox is selected.
- - A split button with the following options: "Delete Selected" (default) & "Adjust Selected (TODO)". The button should only be visible if any or the rows checkbox is selected.
+ - A split button (_"with selected"_) with the following options: "Delete" (default), "Adjust", "Sum". The button should only be visible if any or the rows checkbox is selected.
  - An "add" button should be displayed
  - A pagination component should be displayed on the right only if multipe pages are available for the results
 
  ### Split button
-   - if the "Delete Selected" option was pressed a prompt should be displayed with the following mesage: "All of the selected expenses will be deleted for ever. Are you sure ?"
+ #### Delete
+   - a prompt should be displayed with the following mesage: "All of the selected expenses will be deleted for ever. Are you sure ?"
    - if yes a call to the backend should be made with the selected row ids and show either a fading success (green) or error (red) message on the top
    - upon successfull response the data of the grid should be refetched from the backend using the same filters
-   - The "Adjust Selected" button should dispay a prompt where the user could change the category of all of the transactions
+ #### Adjust
+   - The button should dispay a prompt where the user could change the category of all of the transactions:
       1. a call to the settings api should be made to find the current categories - merchant mappings
       2. the system should calculate and display on the bottom of the prompt the updated merchant re-categorizations
           - every merchant could be added/removed from a category (existing or new) -> show relative graphiscs to indicate this
@@ -55,6 +57,10 @@ It should have as label: "Use AI" and be placed above the *search box*. If check
       4. if cancelled the prompt should be closed with no further up action
       5. if confirmed a call to both the settings & transactions APIs should be made to persist the changes
       6. on success a green postive message should be faded from the top and prompt close and on error a respective erroneous one should be displayed and prompt should stay open
+ #### Sum
+   - A call to the backend Aggregated Data api should be made with the selected transation ids (as filter) and a prompt open
+   - The prompt should display the total sum of all of the expenses retrieved from the backend response and a "Close" button to close the prompt
+   - If the call fails a relative error message should be displayed and no prompt open
  
  ### Add button
    - a prompt should be displayed where you can enter the transaction: `date`, `amount`, `merchant`, `category` and `instrument`
