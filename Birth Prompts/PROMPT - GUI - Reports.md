@@ -19,6 +19,9 @@ This page should display parametrizable graphical information about the expenses
 - The user should be able to see period data of more than 1 iterations (if he chooses to) -> for example, all months of the current year
    - the period iteration number should be configurable (e.g `4` months) -> default should be 1 (current month)
 - The `AggregatedData` api should be used to retrive the data and the GUI should resolve the period type to a date range filter for the backend
+   - If the api returns an error related to historicalrates being synced display a relevant warning prompt message which should advise the user to refresh the page until the data are available
 - On the top of the page a relative message indicating the report amounts currency used should be displayed (_derived from `settings.reports.dataCountryProfile`_)
+- The `ExternalAggregatedData` should be used for getting data related to `reports.assistedHistoricalDataProfiles`
+   - If the api returns an error show a relevant warning prompt message which should advise the user that those kind of data are not available at the moment
 
 

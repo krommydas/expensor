@@ -13,62 +13,68 @@
 ```json
 {
   "ai": {
-    "model": "CLAUDE",
+    "model": CLAUDE,
     "key": "<text>"
   },
-  "ignoredMerchants": ["string"],
+  "ignoredMerchants": [string],
   "categories": [
-    { "name": "string", "group": "string", "merchants": ["string"] }
+    { "name": string, "group": string, "merchants": [string] }
   ],
   "instruments": [
-    { "name": "string", "key": "string", "provider": "string", "currency": "string" }
+    { "name": string, "key": string, "provider": string, "currency": string }
   ],
   "instrumentProviders": [
     {
-      "name": "string",
-      "key": "string",
-      "fileSource": { "namePattern": "string" } (optional),
+      "name": string,
+      "key": string,
+      "fileSource": { "namePattern": string } (optional),
       "sourceColumns": [
         {
           "target": "<Enum — one of expense model columns>",
-          "sourceName": "string" (optional),
-          "sourceIndex": "number" (optional),
-          "predefinedValue": "string" (optional),
-          "format": "string" (optional)
+          "sourceName": string (optional),
+          "sourceIndex": number (optional),
+          "predefinedValue": string (optional),
+          "format": string (optional)
         }
       ],
       "pastImports": [
         {
-          "date": "date",
-          "mnemonic": "string",
-          "checksum": "string",
+          "date": date,
+          "mnemonic": string,
+          "checksum": string,
         }
       ]
     }
   ],
   "reports": {
     "assistedHistoricalDataProfiles": [string],
-    "dataCountryProfile": "string"
+    "dataCountryProfile": string,
   }
 }
 ```
 
 # ExternalAggregatedData (many items)
 ```json
-{
-    "createdAt": "timestamp",
-    "aggregatorValue": "text" (optional),
-    "periodStart": "date",
-    "periodEnd": "date",
-    "value": "number (Int)",
+{ "items": [{
+    "createdAt": timestamp,
+    "aggregatorValue": text (optional),
+    "periodStart": date,
+    "periodEnd": date,
+    "source": string,
+    "value": number (Int)
+}],
+  "isLoading": boolean
 }
 ```
 
-# HistoricalRates (many items) 
+# HistoricalRates
 ```json
-{
-    "date": "date",
-    "currency_pair": "string with predefined format: {CURRENCY_ISO_CODE_FROM}_{CURRENCY_ISO_CODE_TO}",
-    "rate": "number",
+{ "items": [ {
+    "date": date,
+    "currencyFromISO": string,
+    "currencyToISO": string,
+    "rate": number
+    }],
+  "isLoading": boolean
 }
 ```

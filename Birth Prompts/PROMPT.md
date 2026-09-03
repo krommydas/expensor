@@ -27,6 +27,6 @@ Add instructions or create a turnkey hosting set up for someone who only knows h
 - Assume data volume of 1000 entries per month that span across 10 years
 - Assume relatively fast import of data of up to 10000 enties simultaneously
 - Priotize consistency across network failures or accessibility
-- Use free for personal use technologies
+- Use technologies/apis/tools that are mature, popular (for the given task), well maintained, stable and have personal-use free licences
 - AI cost management should be first class citizen in the final build system (wherever & whenever is used)
 

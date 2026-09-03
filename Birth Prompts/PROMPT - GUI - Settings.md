@@ -32,4 +32,25 @@ _See **PROMPT - GUI - Settings - Instruments.md**_
   - if you click somewhere else without a value entered the textbox should disappear and nothing added to the list.. otherwise the typed value should be added to the list
   - A "save changes" button should be displayed on the bottom (if any changes were made) and update the relevant settings model with display of the result like the rest of the settings
 
+# Section Bulk Data Operations
+
+ ## Sub-Section: Restore
+  - Add one row with title "Restore from" and a button next to it with title "Select File"
+  - When clicked, the user should prompted to select a file from the filesystem (only files with the format used in the export api should be selectable)
+  - When the file is selected a relevant call to the APi should be made and a relevant message with success of failure should be faded away on the top of the page
+ ## Sub-Section: Backup
+  - Add one row with title "Create a back-up" and a button next to it with title "Start"
+  - When clicked, a relevant call to the API should be made and a relevant message with success or failure should be faded away on the top of the page
+  - if it is success, a file should be downloaded from the backend to the user device
+ ## Sub-Section: Reset
+  - Add one row with title "Delete all data" and a button next to it with title "Start"
+  - When clicked, the user should be prompted with a message like: "Are you sure ? This is a terminal operation and all data would be lost" and an "Yes" & "No" button
+  - Also, in a "lower" font display a message like: "A most recent backup of the data would be also exported in any case"
+  - If "No" is clicked, do nothing
+  - If "Yes" is clicked do the following:
+      1. Do a call to the Export API -> if the call fails do not do anything else and display a relevant error message
+      2. If the call succeeds a file should be downloaded from the backend to the user device
+      3. Then, do a call to the `Reset` api and a relevant message with success or failure should be faded away on the top of the page
+
+
 

@@ -43,6 +43,7 @@ When a response is received:
     - all successfull row group rows + the duplicate group rows with attribute `notDuplicate`
     - if save was succesfull a relevant fading top screen success message (green background) is displayed and the whole **File tile** is collapsed/closed
     - if save was NOT succesfull a relevant fading top screen error message (red background) is displayed and nothing else should happen
+    - if save was succesfull, the **HistroicalRates Sync** api should be called/triggered & the `SyncingExternalAggregatedData` one in parallel -> ignore any errors
 
 #### Rows Grouping
 
