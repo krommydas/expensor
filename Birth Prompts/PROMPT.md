@@ -28,5 +28,18 @@ Add instructions or create a turnkey hosting set up for someone who only knows h
 - Assume relatively fast import of data of up to 10000 enties simultaneously
 - Priotize consistency across network failures or accessibility
 - Use technologies/apis/tools that are mature, popular (for the given task), well maintained, stable and have personal-use free licences
+- Prefer off-the-shelve technologies instead of building custom
 - AI cost management should be first class citizen in the final build system (wherever & whenever is used)
+- any AI prompt entered by the user should be carefully santizied to avoid any injection attacks
+- Add e2e tests (including headless browser) to test the functionality:
+    - avoid unit tests
+    - prefer regression tests cases but also functional ones
+    - use mostly a hermetic environment with no real integration to 3rd parties
+    - try to use realistic synthetic data
+    - add some real integration tests assuming a small set of data, a custom test specific AI API integration approach (cost free if possible) and same for the bank integrations/imports
+ - Add a Continious integration gtihub file which should start a pipeline for every commit with the following characteristics:
+   - build the whole app/platform on every commit -> fail the pipeline if not success
+   - test everything (not the real integration tests) -> fail the pipeline if not success
+   - add the support to run manually, if needed, the integration tests
+   - the pipeline should be fast to complete
 

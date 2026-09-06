@@ -18,6 +18,10 @@ _See **PROMPT - GUI - Settings - Categorization.md**_
 
 _See **PROMPT - GUI - Settings - Instruments.md**_ 
 
+# Section: External Data Providers
+
+_See **PROMPT - GUI - Settings - External Data Providers.md**_ 
+
 # Section: Reports
 
  ## Sub-Section: General

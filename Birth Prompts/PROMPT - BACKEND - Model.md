@@ -46,6 +46,19 @@
       ]
     }
   ],
+  "externalDataProvider": {
+    "enableBanking": {
+      "appId": string,
+      "privateKey": string,
+      "privateKeyFileName": string,
+      "defaultExpenseColumnMappings": 
+      [{
+          "target": "<Enum — one of expense model columns>",
+          "sourceFieldPath": string,
+          "format": string (optional)
+        }]
+      }
+    },
   "reports": {
     "assistedHistoricalDataProfiles": [string],
     "dataCountryProfile": string,
