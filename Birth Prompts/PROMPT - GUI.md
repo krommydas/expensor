@@ -17,7 +17,17 @@ _See **PROMPT - GUI - Settings.md**_
 
 # Import Page
 
-_See **PROMPT - GUI - Import.md**_
+Displays **tiles**: "Automatic (EU only)", "Manual"
+
+- Clicking a tile hides all other tiles and opens a **pane** with:
+  - `×` button (top-right) — resets to tile view
+  - Tile name as header
+
+ ## Import Automatic
+  _See **PROMPT - GUI - Import - Automatic.md**_
+
+ ## Import Manual
+  _See **PROMPT - GUI - Import - File.md**_
 
 # Management Page
 

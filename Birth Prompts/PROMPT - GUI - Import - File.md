@@ -1,9 +1,8 @@
-Displays **tiles**: "Revolut", "File"
+Displays **tiles**: "EU Institutions", "Manual / File"
 
 - Clicking a tile hides all other tiles and opens a **pane** with:
   - `×` button (top-right) — resets to tile view
   - Tile name as header
-- The **Revolut** tile is not clickable
 
 # File Tile
 

@@ -4,8 +4,9 @@
   - Below that, a file input selector with title: "Select private key". Once a file is selected, the system should read the file and:
      - Put it's contents on a background variable (initialized from `settings.externalDataProvider.enableBanking.privateKey`)
      - Display the filename on the right of the selector (initialized from `settings.externalDataProvider.enableBanking.privateKeyFileName`)
-  - A "save changes" button should be displayed on the bottom (if any changes were made) and update the relevant settings model with display of the result like the rest of the settings
-     - The button should be grayed out if not all of the input fields are filled
+  - A "save changes" button should be displayed on the bottom (if any changes were made or fields filled - otherwise button should be grayed out):
+     1. A call to the **External Data Provider -> Verify Api** should be made and if failed a relevant fading red top message should be displayed and no follow up action
+     2. If the call succeeds a subsequent call to settings api should be made to save the changes settings
 
   ## Default Column Mappings
   Within the same section, an expandable list with with name: "Default Column Mappings" should be displayed which contain items with:
