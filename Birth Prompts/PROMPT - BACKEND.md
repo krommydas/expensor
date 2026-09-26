@@ -21,6 +21,12 @@ The following resources/operations/endpoints/actions should be supported:
   - dataImport
   - dataReset
   - externalDataProvider
+     - verify
+     - instrumentProviders
+     - loginCallback
+     - instruments
+     - expenses
+
 
 ## Settings
 Expose **CRUD** operations with validations for update operations to ensure the data consistency (e.g. a merchant can not belong to more than 1 categories).
