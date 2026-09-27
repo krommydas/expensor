@@ -1,13 +1,4 @@
-Displays **tiles**: "EU Institutions", "Manual / File"
-
-- Clicking a tile hides all other tiles and opens a **pane** with:
-  - `×` button (top-right) — resets to tile view
-  - Tile name as header
-
-# File Tile
-
-## File Input
-
+# Main Tile
 Shows a file input selector (CSV or Excel only). On file selection → calls backend parse API with the file name and its content
 When a response is received:
   - if response indicates some form of unpredictable error display a fading error prompt on the top: "something went wrong, please try again"
@@ -27,14 +18,14 @@ When a response is received:
      - the prompt should also be "closeable" and in that case nothing should happen -> the below grid should be displayed
   - in case of a success response save on the background the provider `key`
 
-### Results Grid
+# Results Grid
 
 - Display as title of the grid the provider name. Before dispaying the grid a call to retrieve the settings model should be done.
 - The grid header row should be "sticky" and all row groups/rows beneath it should be scrollable.
 - The column `importMnemonic` should be hidden both at the header and the row cells but also in any selection done by the user.
    - it should, however, be included in the backend call to save the expense data as explained in **Header row** below
 
-#### Header row 
+## Header row 
 
   - expense model column names
   - below each column name: a label showing the mapping source (file column name or index), styled differently from the column name + the format is available (e.g. date)
@@ -44,7 +35,7 @@ When a response is received:
     - if save was NOT succesfull a relevant fading top screen error message (red background) is displayed and nothing else should happen
     - if save was succesfull, the **HistroicalRates Sync** api should be called/triggered & the `SyncingExternalAggregatedData` one in parallel -> ignore any errors
 
-#### Rows Grouping
+## Rows Grouping
 
 The rows should be grouped in 3 categories:
 
@@ -55,7 +46,7 @@ The rows should be grouped in 3 categories:
   | **Duplicates** | Rows where all fields are parsed but they are found more than 1 time in the results | By date | light yellow |
   | **Successful** | All remaining rows | By date | light green |
 
- #### Problematic rows
+ ### Problematic rows
 
 Those should have the following actions as a last column:
 
@@ -78,7 +69,7 @@ In addition, empty cells should be clickable with the following logic on click:
         - "Apply" -> this should do a call to the settings to update the instrument provider with the key stored in the background and the selected column mapping to be updated/overriden
         - "Cancel" -> this should just close the prompt
 
-#### Ignored rows
+ ### Ignored rows
 
 Those should have the following actions as a last column:
 
@@ -86,7 +77,7 @@ Those should have the following actions as a last column:
   - "Un-Ignore this row only" → removes the row from the grid (remembers the user selection in case the data of the grid are refetched) and moves it either to the successfull or problematic rows, depending if it has any empty cells
   - "Un-Ignore all rows for merchant: {merchant}" → calls settings API to remove merchant from `ignoredMerchants` & moves all rows that match that merchant to the respective rows group dependening if they have empty cells or not, just like in the above case.
 
-#### Duplicate rows
+ ### Duplicate rows
 Those should have the following actions as a last column:
 
 **"Not a duplicate"** - only if the row is NOT marked as `notDuplicate` on the background
@@ -97,7 +88,7 @@ Remove the `notDuplicate` attribute of the row and remembers the user selection 
 
 Rows with `notDuplicate` attribute should be marked with the same background color as the *successfull rows*
 
-#### Successful rows
+ ### Successful rows
 
 Those should have the following actions as a last column:
 

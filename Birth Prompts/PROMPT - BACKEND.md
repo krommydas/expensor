@@ -25,7 +25,7 @@ The following resources/operations/endpoints/actions should be supported:
      - instrumentProviders
      - loginCallback
      - instruments
-     - expenses
+     - import
 
 
 ## Settings
