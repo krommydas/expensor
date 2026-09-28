@@ -45,3 +45,20 @@ _See **PROMPT - GUI - Reports.md**_
   - after the call a redirect to **Import Automatic** page should be made
     - if the call fails a relative error top fading message should appear suggesting to the user to start the authorization process again -> redirect should continue
     - if the call succeeds the redirect page should be opened with url parameter `instrumentProviderId` = state url parameter
+
+# First Time Wizard Page
+That page should be visible as default when both of the below are true:
+  - any GUI page is trying to be accessed 
+  - all the settings model loaded from the backend is empty
+
+It should containt a configuration wizard for the settings where you will be prompted to enter the following ones:
+ - `settings.ai` (optional - but needs to be verified if entered)
+ - `settings.reports` (optional)
+ - `settings.externalDataProvider.enableBanking` (except _defaultExpenseColumnMappings_) -> (optional - but needs to be verified if entered)
+
+Look on each settings set-up in **PROMPT - GUI - Settings - Categorization.md**  & **PROMPT - GUI - Settings - External Data Providers.md** files.
+
+The user should be able to cancel or close the wizard.
+  - that selection should be persisted and the wizard not appear again
+  - if the application is re-installed or `Reset` is done (see **PROMPT - GUI - Settings.md**) then the wizard should appear again
+   

@@ -13,7 +13,7 @@
 ```json
 {
   "ai": {
-    "model": CLAUDE,
+    "model": "<Enum - one of: CLAUDE>",
     "key": "<text>"
   },
   "ignoredMerchants": [string],
