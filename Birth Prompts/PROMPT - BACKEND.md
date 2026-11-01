@@ -34,9 +34,13 @@ Expose **CRUD** operations with validations for update operations to ensure the 
 ## Expenses
 Expose the following operations:
 ### create
-  - input: either a single or a list of full expense model (without the id column)
+  - input: either a single or a list of full expense model (without the id column) + a field per item to indicate if to override duplicates
   - output: a status indicating the result of the opretion
-  - operation: add the expense model(s) (autogenerate the id) 
+  - operation: add the expense model(s)
+  #### ID & Duplicates
+    - auto generate the id based on the hash of the fields for each item
+    - the id should be a primary key and a referential constraint on the table/storage entity
+    - if a flag is set to override duplicates than an extra "salt" should be entered during the id generation to be able to insert the row
 ### update
   - input: a list of expense models
   - output: a status indicating the result of the operation

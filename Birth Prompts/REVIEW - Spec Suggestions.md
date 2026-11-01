@@ -6,21 +6,21 @@ _Review of the Birth Prompts, 2026-09-30. Items are ordered most important first
 
 ## 1. Contradictions that would cause bugs
 
-- [ ] **1. The Change Category flow gets blocked by duplicate protection.**
+- [x] **1. The Change Category flow gets blocked by duplicate protection.**
   In the file-import grid, "Change Category" re-parses the file through the backend. But parsing stores the file's checksum in `pastImports`, so the second parse is rejected as "File data already imported".
   _Files:_ GUI - Import - File, BACKEND - File Import
 
-- [ ] **2. Parsing permanently changes data before the user confirms anything.**
+- [x] **2. Parsing permanently changes data before the user confirms anything.**
   Parse saves the checksum, creates new providers and instruments, and saves AI-chosen categories. If the user closes the grid without saving, they can never import that file again, and the settings are already changed.
   _Suggestion:_ make parse a preview with no side effects. Write the checksum, providers, instruments and categories only when the user clicks "Save Successful Rows".
   _Files:_ BACKEND - File Import, BACKEND - External Data Provider
 
-- [ ] **3. Duplicate protection misses the common case.**
+- [x] **3. Duplicate protection misses the common case.**
   The file checksum only catches the exact same file. The Duplicates group only finds duplicates inside that one file. Overlapping statements (a March file and a Q1 file) or a bank import over a date range already imported will create duplicates. The bank-import mnemonic includes a timestamp, so its checksum never matches either.
   _Suggestion:_ give each transaction a fingerprint and check it against expenses already stored. For bank data, use `entry_reference`/`transaction_id`; for files, use a hash of date, amount, merchant and instrument.
   _Files:_ BACKEND - File Import, BACKEND - External Data Provider, GUI - Import - File
 
-- [ ] **4. Category has two sources of truth.**
+- [x] **4. Category has two sources of truth.**
   Each expense stores its own `category`, but the merchant-to-category mapping lives in settings, and the GUI says "Changing this will affect both existing and new data". Decide whether an expense's category is looked up from the merchant at read time or copied onto the expense. If it's copied, every mapping change has to update the stored expenses too.
   _Files:_ BACKEND - Model, GUI - Settings - Categorization, GUI - Management
 

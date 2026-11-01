@@ -49,7 +49,7 @@ It should have as label: "Use AI" and be placed above the *search box*. If check
    - if yes a call to the backend should be made with the selected row ids and show either a fading success (green) or error (red) message on the top
    - upon successfull response the data of the grid should be refetched from the backend using the same filters
  #### Adjust
-   - The button should dispay a prompt where the user could change the category of all of the transactions:
+   - The button should dispay a prompt where the user could change the merchant-category mapping of all of the transactions:
       1. a call to the settings api should be made to find the current categories - merchant mappings
       2. the system should calculate and display on the bottom of the prompt the updated merchant re-categorizations
           - every merchant could be added/removed from a category (existing or new) -> show relative graphiscs to indicate this
@@ -63,9 +63,9 @@ It should have as label: "Use AI" and be placed above the *search box*. If check
    - If the call fails a relative error message should be displayed and no prompt open
  
  ### Add button
-   - a prompt should be displayed where you can enter the transaction: `date`, `amount`, `merchant`, `category` and `instrument`
+   - a prompt should be displayed where you can enter the transaction: `date`, `amount`, `merchant` and `instrument`
    - for merchant an auto-complete feature should be done where merchant names from the settings api should be searched and prompted
-   - if a merchant is selected, a settings search should be made to find if it belongs to a category and this should be preslected on the category input
+   - if a merchant is selected, a settings search should be made to find if it belongs to a category and this should be dispayed as the resolved `category`
    - if the user changes the category of an existing merchant or add a new merchant a relative wanring message should be displayed on the bottom for settings update with the related changes
    - the instrument field should be a select one with the available values from the settings model
    - the `importMnemonic` should be a custom predefined system wide value to indicate it's a GUI user custom single addition of the transaction and not visible to the user
@@ -76,7 +76,8 @@ The expense data rows should be displayed here with the following rules:
  - `id` field should be available in the row data on the background but not visible
  - `instrument` cells should display the instrument name retrieved by calling the `settings` -> `instruments` where **key** field is equal to the row instrument cell value
  - `amount` field should also display the *currency* by looking up the `currency` field from the row instrument key (see above)
- - merchant, date, category and importMnemonic should be also displayed
+ - `category` field should be displayed beased on the category-merchant mapping available from `settings`
+ - merchant, date and importMnemonic should be also displayed
  - the user should be able to move the columns around by drap and drop and change their appearance order (from left to right)
  - the default columns order should be: date, amount, category, merchant, instrument, importMnemonic
  - a checkbox should always be dispayed per row as a last column on the right

@@ -11,7 +11,7 @@ The api method input should be:
 First of all, for the *dateFilter.to* field if it's not defined then use the current date.
 
 Also, the search logic should be fast:
- - consider creating a materialized facade of the *expense* model with all the possible search fields enriched to speed up things
+ - consider creating a materialized facade of the *expense* model with all the possible search fields enriched to speed up things (e.g to add category from the merchant mappings)
 
  ## when useAI=false
 

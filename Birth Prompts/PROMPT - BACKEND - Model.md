@@ -5,7 +5,6 @@
 | date | date | |
 | merchant | text | |
 | amount | number (2 decimal places) | |
-| category | text | |
 | instrument | text | |
 | importMnemonic | text | optional |
 
@@ -41,7 +40,6 @@
         {
           "date": date,
           "mnemonic": string,
-          "checksum": string,
         }
       ]
     }
