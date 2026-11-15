@@ -24,7 +24,7 @@ _Review of the Birth Prompts, 2026-09-30. Items are ordered most important first
   Each expense stores its own `category`, but the merchant-to-category mapping lives in settings, and the GUI says "Changing this will affect both existing and new data". Decide whether an expense's category is looked up from the merchant at read time or copied onto the expense. If it's copied, every mapping change has to update the stored expenses too.
   _Files:_ BACKEND - Model, GUI - Settings - Categorization, GUI - Management
 
-- [ ] **5. Renaming an instrument key orphans old expenses.**
+- [x] **5. Renaming an instrument key orphans old expenses.**
   Expenses reference instruments by `key`, and changing the key "affects only new data", so existing expenses point at a key that no longer exists. The same applies to names used as keys for categories and groups.
   _Suggestion:_ use stable internal IDs and keep names purely for display.
   _Files:_ BACKEND - Model, GUI - Settings - Instruments
@@ -34,7 +34,7 @@ _Review of the Birth Prompts, 2026-09-30. Items are ordered most important first
   _Suggestion:_ replace the flag with a lease (a start time plus a timeout).
   _Files:_ BACKEND, BACKEND - Aggregated Data, BACKEND - Model
 
-- [ ] **7. The currency lists disagree.**
+- [x] **7. The currency lists disagree.**
   Instruments allow CHF and EUR, the country list is Switzerland and Greece, but the file-import prompt shows every currency from Frankfurter. Pick one list.
   _Files:_ GUI - Settings - Instruments, GUI - Settings, GUI - Import - File
 
@@ -42,23 +42,23 @@ _Review of the Birth Prompts, 2026-09-30. Items are ordered most important first
 
 ## 2. Money and bank data correctness
 
-- [ ] **8. Amounts.**
+- [x] **8. Amounts.**
   Store them as integer cents or a decimal type, never floats. Also define the sign rule. Bank transactions carry `credit_debit_indicator`, and without it salary and refunds count as spending. The same goes for pending versus booked transactions: probably import booked (`BOOK`) only.
   _Files:_ BACKEND - Model, BACKEND - External Data Provider
 
-- [ ] **9. The predefined EnableBanking mappings look wrong (verify).**
+- [x] **9. The predefined EnableBanking mappings look wrong (verify).**
   I believe `creditor_account` has no `name` field; that is on `creditor`. For card payments, the merchant is often only in `remittance_information`. Also, `debtor_account` is only the user's own account for outgoing payments. Check these against the Transaction schema: https://enablebanking.com/docs/api/reference/#transaction
   _Files:_ GUI - Settings - External Data Providers
 
-- [ ] **10. Historical rates have gaps.**
+- [x] **10. Historical rates have gaps.**
   Frankfurter/ECB publishes no rates on weekends or holidays, so conversion needs a fallback to the nearest earlier date. Also, step 6 only compares the overall min/max dates, which won't catch newly added currencies or gaps in the middle of the range.
   _Files:_ BACKEND (Syncing Historical rates), BACKEND - Aggregated Data
 
-- [ ] **11. Sum loses the cents.**
+- [x] **11. Sum loses the cents.**
   The Manage page's Sum uses `aggregatedData`, which rounds to an integer. Either return decimals or add a separate exact-sum call.
   _Files:_ GUI - Management, BACKEND - Aggregated Data
 
-- [ ] **12. Merchant names need normalising.**
+- [x] **12. Merchant names need normalising.**
   Bank strings like `AMAZON*1X2Y3 LUX` vary per transaction. With exact-match merchant lists, categorisation stays manual forever.
   _Suggestion:_ add a normalisation step, or pattern rules such as prefix or regex matching.
   _Files:_ BACKEND - Model, BACKEND - File Import, GUI - Settings - Categorization
@@ -77,7 +77,7 @@ _Review of the Birth Prompts, 2026-09-30. Items are ordered most important first
   _Suggestion:_ derive the key from a passphrase the user enters instead (for example, AES-GCM with a key derived via Argon2 or PBKDF2).
   _Files:_ BACKEND (Export/Import), GUI - Settings (Bulk Data Operations)
 
-- [ ] **15. Secrets leak through the settings API.**
+- [x] **15. Secrets leak through the settings API.**
   Settings CRUD returns the AI key and the EnableBanking private key to the browser.
   _Suggestion:_ make them write-only: return a masked value or just a "set" flag.
   _Files:_ BACKEND, GUI - Settings, GUI - Settings - External Data Providers

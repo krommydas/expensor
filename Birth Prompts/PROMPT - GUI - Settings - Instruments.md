@@ -1,15 +1,17 @@
 # Subsection — Items
 
-- Search input: "Search for instrument/provider"
+## Search input: "Search for instrument/provider"
    - upon search input entered a call to the backend should be made to find an instrument based on that name or to it being linked to provider matching the input
    - the result should be displayed on the accordion component explained next
-- Accordion list of istruments (all loaded from server initially or based on the search criteria):
+## Accordion list of istruments (all loaded from server initially or based on the search criteria):
   - they should be grouped by provider name
   - each expanded instrument section should display:
      - it's name as a text box -> any change to it should trigger a relative update to the backend and a green disappearing message on complete with the text "updated" ("red" in case of error)
-     - it's key as a text box ("with label Import Mapping Key") -> any change to it should trigger a prompt with header: "Changing this will affect only new data" and buttons "Save" & "Cancel" with both triggering a relative update on the backend
-    - it's cyrrency as a select component ->a ny change to it should trigger a prompt with header: "Changing this will affect existing & new data" and buttons "Save" & "Cancel" with both triggering a relative update on the backend. The list of available currencies to choose from are "CHF, EUR".
-  - Below the accordion (and within the provider grouping): an "Add Instrument" button:
+     - it's key as a text box ("with label Import Mapping Key") -> should be "disabled" if the instrument is linked to an expense
+     - it's cyrrency as a select component 
+        - should be "disabled" if the instrument is linked to an expense
+        - retrieve the currency items to show using a free open api with no authentication/authorization (e.g. frankurter) and display/store their ISO code
+  ### Below the accordion (and within the provider grouping): an "Add Instrument" button:
     - all of the fields of the instrumnet section should be displayed plus a "Save" & "Cancel" button on the bottom
     - chaning any input field data should not trigger an update on the backend like on existing isntruments edit
     - all fields are mandatory
@@ -17,10 +19,10 @@
 
 # Subsection — Providers
 
-- Search input: "Search for provider"
+## Search input: "Search for provider"
   - upon search input entered a call to the backend should be made to find an instrument linked to that provider
   - the result should be displayed on the accordion component explained next
-- Accordion list of providers:
+## Accordion list of providers:
    - load all (or the ones based on the search input) instruments and group them by provider
    - each expanded provider section should display:
      - it's name as a text box -> any change to it should trigger a relative update to the backend and a green disappearing message on complete with the text "updated" ("red" in case of error)
@@ -30,7 +32,7 @@
         - the option to add a new provider should also be displayed
         - a button with name "Save" and as a disclaimer should be on the bottom with the following text: "Changing this will affect both existing & new data"
         - upon clicking on the button a call should be made to the settings api with the the instrument and it's updated provider
-    - a sub section called: "File Source" with:
+   - a sub section called: "File Source" with:
        - it's fileSource.namePattern field as "Import File Pattern" with an input text box -> any change to it should trigger a relative update to the backend and a green disappearing message on complete with the text "updated" ("red" in case of error)
        - below it, 3 examples should be displayed with file names matching that pattern'
    - an expandable sub section called: "Past Imports" which should display on expand a view only list of the `date` + the `mnemonic` fields of the **pastImports** field

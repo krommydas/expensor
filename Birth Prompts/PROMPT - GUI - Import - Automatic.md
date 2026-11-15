@@ -46,7 +46,12 @@
     - `dateFrom`, `dateTo` values from the date pickers 
     - the selected instrument item `id` + `settingsKey`
   - if the call succeeds display the **Results Grid** with the call data 
-  - if the call fails display a top fading error message and leave the prompt open
+  - if the call fails with an error indicating **isCredit** information on the instrument is missing then:
+     - display a warning type of prompt with title "Instrument Additional Information"
+     - inside a text: "is the instrument a credit card ?"
+     - a slider or checkbox field next to the next with values "Yes/No"
+     - a button on the bottom with title "Try Again" which should redo the same call but this time with the `isCredit` field populated from the user selection 
+  - if the call fails with any other error then display a top fading error message and leave the prompt open
   - the prompt should be closeable manually 
 
 # Results Grid

@@ -30,6 +30,7 @@ The following resources/operations/endpoints/actions should be supported:
 
 ## Settings
 Expose **CRUD** operations with validations for update operations to ensure the data consistency (e.g. a merchant can not belong to more than 1 categories).
+Secrets (e.g `externalDataProvider.privateKey` & `ai.key`) should only be updatable and should be returned masked in get operations
 
 ## Expenses
 Expose the following operations:
@@ -63,13 +64,11 @@ _See **PROMPT - BACKEND - File Import.md**_
 The api should accept no parameters and do the following:
 
 1. If the `HistoricalRates.isLoading` is **true** schedule to start again a bit later (add max retries), otherwise update the value to `true` 
-2. Find the max & min dates of all expenses
-3. Find the max & min dates of all `HistoricalRates`
-4. Find all the unique currencies from `settings.instruments` that do not match the currency from the `settings.dataCountryProfile`
-5. If there are no currencues do nothing (_all expenses stored instruments with local currency_)
-6. If the min & max of the rates conrtain the equivalent dates for expenses and all currencies from step **4**, finish the flow
-7. If not, use an external API to get the historic rates using the min & max dates of the expenses & the currency pair combinations between the currencies found in step **4** and the local currency (`settings.dataCountryProfile`)
-8. Store the results and at the same time update the flag `HistoricalRates.isLoading` to false
+2. Find all the unique currencies from `settings.instruments` that do not match the currency from the `settings.dataCountryProfile`
+3. If there are no currencues do nothing (_all expenses stored instruments with local currency_)
+4. Find the max & min dates of all expenses
+5. Use an external API to get the historic rates using the min & max dates of the expenses & the currency pair combinations between the currencies found in step **2** and the local currency (`settings.dataCountryProfile`)
+6. Store the results and at the same time update the flag `HistoricalRates.isLoading` to false
 
 ## Aggregated Data
 _See **PROMPT - BACKEND - Aggregated Data.md**_ 

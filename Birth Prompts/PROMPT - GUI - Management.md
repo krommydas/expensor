@@ -76,6 +76,9 @@ The expense data rows should be displayed here with the following rules:
  - `id` field should be available in the row data on the background but not visible
  - `instrument` cells should display the instrument name retrieved by calling the `settings` -> `instruments` where **key** field is equal to the row instrument cell value
  - `amount` field should also display the *currency* by looking up the `currency` field from the row instrument key (see above)
+   - the amount decimal places to display should be calculated from the related currency decimal places 
+   - hard code the rule of currency decimal places with the assumption of every currency has 2 decimal places except a few with special characteristics
+   - hard code the non-2-decimal place currencies
  - `category` field should be displayed beased on the category-merchant mapping available from `settings`
  - merchant, date and importMnemonic should be also displayed
  - the user should be able to move the columns around by drap and drop and change their appearance order (from left to right)

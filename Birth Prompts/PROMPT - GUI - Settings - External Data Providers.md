@@ -47,15 +47,11 @@
     },
     {
         "target": "merchant",
-        "sourceFieldPath": "creditor_account.name",
+        "sourceFieldPath": "remittance_information ",
     },
     {
         "target": "amount",
         "sourceFieldPath": "transaction_amount.amount"
-    },
-    {
-        "target": "instrument",
-        "sourceFieldPath": "debtor_account.other.identification"
     },
  ]
  ```

@@ -6,7 +6,8 @@ The cache should contain the following data/structure:
 **Active Session Details**
   - instrumetProviderId
   - sessionId
-  - startedAt 
+  - startedAt
+  - isCredit 
 
 **Pending Authorization**
 
@@ -72,6 +73,9 @@ The cache should contain the following data/structure:
  - a call to the **Authorize user session** should be made with that code
  - the following should be stored stored in the cache (specific cache for this) from the results (if the call succeeeds)
      - session_id, current_timestamp + instrumentProviderId
+     - `isCredit` should be false if **cash_account_type** is oneOf (CASH, SVGS)
+     - if **cash_account_type** is anything else then heuristic logic should be used to indetify the `isCredit` field (e.g. _details_ or _name_ field contain the name "Credit")
+     - if not enough confidence is there to identify the nature of the instrument/account then leave the `isCredit` field empty/null
      - the entry should have a ttl equal to the enableBanking session expiration time picked when doing the **Start user authorization** at the `Instruments` api
  - the **Pending Authorization** entry should be deleted from the cache -> that action should happen even if the previous call fails
 
@@ -81,6 +85,7 @@ The cache should contain the following data/structure:
   - instrumentId
   - instrumentSettingsId
   - dateFrom, dateTo (optional)
+  - isCredit (optional)
  ## Output
  - A list of parsed rows, each containing expense model fields (some may be empty) **without** the `id` column/field
  - A sample list of rows parsed (not mapped to expense columns):
@@ -88,10 +93,14 @@ The cache should contain the following data/structure:
    - include a list of rows with each row having either a list of column values (text) or column attributes & values
  - the column mappings (type of `settings.instrumentProviders.sourceColumns` - except of the sourceIndex) used for this mapping
  ## Logic
-  1. a call to **Get account transactions** of enableBanking should be made with accountId coming from the input (and dates, if provided)
-  2. if a `continuation_key` is provided, continue polling the api for data until this key is empty
-  3. flatten the response nested structure data (e.g. `transaction_amount.amount` & `transaction_amount.currency`)
-  4. follow **Duplicate protection** as explained here _PROMPT - BACKEND - File Import.md_ (maybe a generic functionality ?)
+  1. if **isCredit** field is not provided in the input and also missing from the cache entry then throw a relative error for the GUI to pick it up
+  2. a call to **Get account transactions** of enableBanking should be made with:
+       - `accountId` = **instrumentId**
+       - dates, if provided
+       - `transaction_status` = **BOOK**
+  3. if a `continuation_key` is provided, continue polling the api for data until this key is empty
+  4. flatten the response nested structure data (e.g. `transaction_amount.amount` & `transaction_amount.currency`)
+  5. follow **Duplicate protection** as explained here _PROMPT - BACKEND - File Import.md_ (maybe a generic functionality ?)
     - use the _instrumentProviderId_ from the cache to find the relevant settings entry
     - the mnemonic should contain the following:
        - instrument provider name (maybe shorten if too long) -> use instrumentSettingsId from input to find it in the `settings`
@@ -99,11 +108,15 @@ The cache should contain the following data/structure:
        - datefrom(if applicable) 
        - dateTo (if applicable) 
        - currentTimestamp
-  5. try to find the mapping logic to the native **expense** model using the the first approach that is applicable from below
+  6. filter out any transactions where either of the following applies:
+     - `isCredit` (from input or cache entry) is **true** && `credit_debit_indicator` = DBIT
+     - `isCredit` (from input or cache entry) is **false** && `credit_debit_indicator` = CRDT
+  7. try to find the mapping logic to the native **expense** model using the first approach that is applicable from below
      - if a `settings.instrumentProviders[].key` == _cache.instrumetProviderId_ record is found with sourceColumns mappings, use it to map the data
      - if a `settings.externalDataProvider.enableBanking.defaultExpenseColumnMappings` entry is found use it to map the data
      - use the **Predefined Default Column Mappings** as explained in -> _PROMPT - GUI - Settings - External Data Providers.md_ 
-  6. map the data following the **Apply Columns Mapping** as explained in -> _PROMPT - BACKEND - File Import.md_ (maybe a generic functionality ?)
-  7. follow the **Post Processing** as explained in -> _PROMPT - BACKEND - File Import.md_ (maybe a generic functionality ?)
-  8. return the data as explained in the _Output_ section
+  8. map the data following the **Apply Columns Mapping** as explained in -> _PROMPT - BACKEND - File Import.md_ (maybe a generic functionality ?)
+    - the expense model `instrument` field should be auto-populated with the **instrumentSettingsId** from the input
+  9. follow the **Post Processing** as explained in -> _PROMPT - BACKEND - File Import.md_ (maybe a generic functionality ?)
+  10. return the data as explained in the _Output_ section
 

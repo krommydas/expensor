@@ -59,5 +59,8 @@ The api should accept no parameters and do the following:
  7. Reduce the expenses by summing their amount field on each bucket
      - The final amount value per backet should be on the currency of the `settings.reports.dataCountryProfile` 
      - If any expense belongs to an instrument with currency different from that currency use the cached rates to convert the amount accordingly
+       - if an exact date match is not found on the rates, go backwards in time until you reach a date with a rate
+       - before applying the rate add the decimal places to the expense model amount integer value using the currency decimal places details
+       - Use as reference for the currency decimal places the related logic from _**PROMPT - GUI - Management.md**_ Data Rows area
      - The final sum amount should be rounded to an integer value
  8. Return those buckets as response

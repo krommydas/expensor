@@ -23,5 +23,6 @@ This page should display parametrizable graphical information about the expenses
 - On the top of the page a relative message indicating the report amounts currency used should be displayed (_derived from `settings.reports.dataCountryProfile`_)
 - The `ExternalAggregatedData` should be used for getting data related to `reports.assistedHistoricalDataProfiles`
    - If the api returns an error show a relevant warning prompt message which should advise the user that those kind of data are not available at the moment
+- The amounts displayed should have decimal places according to their instrument currency -> use the related logic from _**PROMPT - GUI - Management.md**_ Data Rows area
 
 
