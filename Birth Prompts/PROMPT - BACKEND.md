@@ -1,4 +1,5 @@
 Use modern, mature, lightweight technologies.
+There is a restriction on the programmatic language (see reverse proxy section).
 
 # Data Models
 
@@ -26,6 +27,7 @@ The following resources/operations/endpoints/actions should be supported:
      - loginCallback
      - instruments
      - import
+  - reverseProxy
 
 
 ## Settings
@@ -91,3 +93,6 @@ An api with no inputs, which on call it should delete all of the stored data
 
 ## External Data Provider
 _See **PROMPT - BACKEND - External Data Provider.md**_ 
+
+## Reverse Proxy
+_See **PROMPT - BACKEND - Reverse Proxy.md**_ 

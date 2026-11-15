@@ -17,17 +17,17 @@
    - the data for this list should come from the settings model of: `settings.externalDataProvider.enableBanking.defaultExpenseColumnMappings`
    - if the relevant setting above is missing a value then a predefined hardcoded value (`PredefinedDefaultColumnMappings`) will be used
   
-  ## EnableBankingSource
+  ### EnableBankingSource
   That should be a button which should display the path from `settings.externalDataProvider.enableBanking.defaultExpenseColumnMappings[].sourceFieldPath` in text pieces from left to right separated with a "tranisition icon" (_e.g. "Transaction Amount -> Amount"_). The text pieces should be converted from "json" friendly path names to human readable ones, for example: "transaction_amount" -> "Transaction Amount". Once this button is clicked it should open a dialog window with:
    - title something like: "Select Source"
    - on the left an `Expandable Menu`
    - on the right a `Preview Section`
-  ### Expandable Menu
+  #### Expandable Menu
    - That should be an expandable menu from left to right (e.g. material design "Cascading menu")
    - Every menu structure should be driven from the transation schema of enablebanking: https://enablebanking.com/docs/api/reference/#transaction
    - If a "leaf" item is selected from the current menu the whole `EnableBankingSource` dialog should close and the current menu path should be stored with "dots" on the `settings.externalDataProvider.enableBanking.defaultExpenseColumnMappings[].sourceFieldPath` (_e.g. "transaction_amount.amount"_)
    - a call to the backend settings api should be made to save that setting and a relative fading positive or negative message displayed on top of the page
-  ### Preview Section
+  #### Preview Section
    - That should be a tab bar with 2 options: "Current Level Example", "Full Example"
    - If the first option is selected, it should display an example from synthetic predefined transaction data for the current `Expandable Menu` selected on the left, for example:
       ```
@@ -38,7 +38,7 @@
       ```     
   - If the second option is selected a scrollable preview of the full synthetic predefined transaction data should be displayed
   
- ## Predefined Default Column Mappings
+ ### Predefined Default Column Mappings
  ```json
  [
     {
@@ -55,4 +55,11 @@
     },
  ]
  ```
+
+ ## Login Callback Set up
+After the expandable list of column mappings and within the same section the set up of the ngrok public-to-localhost reverse proxy should be configured which will act as an enabler to specify a static domain and https traffic on the localhost for the enablebanking login callback. A small text should be displayed to explain this set up.
+The static domain name should be also displayed clearly to help the set-up on enableBanking (something like `https://expensor.ngrok.com`).
+  - below that text explanation a text field input should be displayed with name "ngrok Api Key"
+  - it should be filled from the backend (masked) if a value exists
+  - 
   

@@ -54,7 +54,13 @@
           "target": "<Enum — one of expense model columns>",
           "sourceFieldPath": string,
           "format": string (optional)
-        }]
+        }],
+      "callback": {
+        "ngrokReverseProxy": {
+          "apiKey": string,
+          "agentToken": string
+        }
+       }, 
       }
     },
   "reports": {
